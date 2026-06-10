@@ -42,7 +42,7 @@ jobs:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           MODEL: gemma-4-26b-a4b-it
           USE_DUMMY: "false"
-          USE_SPECIALISED: "true"
+          USE_SPECIALISED: "false"
           USE_VANILLA: "false"
         run: |
           python -m src.main
