@@ -43,7 +43,7 @@ jobs:
           MODEL: gemini-3.1-flash-lite
           USE_DUMMY: "false"
           USE_SPECIALISED: "false"
-          USE_VANILLA: "false"
+          USE_VANILLA: "true"
         run: |
           python -m src.main
 
