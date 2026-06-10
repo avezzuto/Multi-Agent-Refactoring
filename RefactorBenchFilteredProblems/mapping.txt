@@ -1,8 +1,6 @@
---- fastapi_refactor ---
-get-auth-scheme-param-task.txt,function_rename
---- celery_refactor ---
-ensure_serialize-task.txt,function_rename
---- ansible_refactor ---
-parse_key_value-task.txt,function_rename
-sort-groups-to-group-sort-task.txt,function_rename
-rename-lenient-lowercase-task.txt,function_rename
+--- salt_refactor ---
+perm-denied-task.txt,variable_rename
+cant-create-task.txt,variable_rename
+get-unavail-task.txt,variable_rename
+ex-state-fail-task.txt,variable_rename
+ex-pillar-fail-task.txt,variable_rename
