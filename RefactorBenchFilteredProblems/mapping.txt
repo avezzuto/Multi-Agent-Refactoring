@@ -1,31 +1,31 @@
 --- fastapi_refactor ---
-value-is-a-sequence-task.txt,function_rename
-get-auth-scheme-param-task.txt,function_rename
+value-is-a-sequence-task.txt,method,value_is_sequence
+get-auth-scheme-param-task.txt,method,get_authorization_scheme_param
 --- celery_refactor ---
-rename-host-format-task.txt,function_rename
-truncate-text-task.txt,function_rename
-ensure_serialize-task.txt,function_rename
+rename-host-format-task.txt,method,host_format
+truncate-text-task.txt,method,truncate
+ensure_serialize-task.txt,method,ensure_serializable
 --- scrapy_refactor ---
-rename-engine-status-task.txt,function_rename
-rename-description-commands-task.txt,variable_rename
+rename-engine-status-task.txt,method,get_engine_status;format_engine_status;print_engine_status
+rename-description-commands-task.txt,method,short_desc;long_desc
 --- ansible_refactor ---
-parse_key_value-task.txt,function_rename
-sort-groups-to-group-sort-task.txt,function_rename
-rename-lenient-lowercase-task.txt,function_rename
+parse_key_value-task.txt,method,parse_kv
+sort-groups-to-group-sort-task.txt,method,sort_groups
+rename-lenient-lowercase-task.txt,method,lenient_lowercase
 --- django_refactor ---
-rename-file-move-safe-task.txt,function_rename
+rename-file-move-safe-task.txt,method,file_move_safe
 --- salt_refactor ---
-perm-denied-task.txt,variable_rename
-cant-create-task.txt,variable_rename
-mksls-to-specific-task.txt,function_rename
-get-unavail-task.txt,variable_rename
-ex-state-fail-task.txt,variable_rename
-ex-pillar-fail-task.txt,variable_rename
+perm-denied-task.txt,variable,EX_NOPERM
+cant-create-task.txt,variable,EX_CANTCREAT
+mksls-to-specific-task.txt,method,mksls
+get-unavail-task.txt,variable,EX_UNAVAILABLE
+ex-state-fail-task.txt,variable,EX_STATE_FAILURE
+ex-pillar-fail-task.txt,variable,EX_PILLAR_FAILURE
 --- tornado_refactor ---
-rename-to-camel-case-task.txt,function_rename
+rename-to-camel-case-task.txt,method,get_new_ioloop
 --- flask_refactor ---
-render-template-str-task.txt,function_rename
-stream-template-str-task.txt,function_rename
-rename-send-from-directory-task.txt,function_rename
+render-template-str-task.txt,method,render_template_string
+stream-template-str-task.txt,method,stream_template_string
+rename-send-from-directory-task.txt,method,send_from_directory
 --- requests_refactor --- 
-rename-super-len-complex-len-task.txt,function_rename
+rename-super-len-complex-len-task.txt,method,super_len

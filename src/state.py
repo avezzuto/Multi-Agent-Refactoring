@@ -1,10 +1,12 @@
 from typing import TypedDict, Optional, Any
-
+from pathlib import Path
 
 class RefactoringState(TypedDict):
     # Input
     instruction: Optional[str]
     repository_path: str
+    relevant_files: list[Path]
+    task_name: str
 
     # Planner output
     file_plans: list[dict[str, Any]]

@@ -12,6 +12,7 @@ from src.agents.planner_agent import PlannerAgent
 from src.agents.test_validator_agent import TestValidatorAgent
 from src.state import RefactoringState
 from src.utils.logger import logger
+from src.config import MODEL, USE_SPECIALISED
 
 MAX_COMPILE_ATTEMPTS = 5
 MAX_TEST_ATTEMPTS = 5
@@ -32,17 +33,17 @@ def _count_test_functions(test_paths: list[str]) -> int:
     return count
 
 
-def build_graph(model_name: str, use_specialised_refactoring_agents: bool = False) -> StateGraph:
-    planner = PlannerAgent(model_name)
+def build_graph() -> StateGraph:
+    planner = PlannerAgent(MODEL)
     compiler = CompilerAgent()
-    test_validator = TestValidatorAgent(model_name)
-    fixer = FixerAgent(model_name)
+    test_validator = TestValidatorAgent(MODEL)
+    fixer = FixerAgent(MODEL)
 
-    if use_specialised_refactoring_agents:
-        variable_refactoring_agent = VariableRefactoringAgent(model_name)
-        function_refactoring_agent = FunctionRefactoringAgent(model_name)
+    if USE_SPECIALISED:
+        variable_refactoring_agent = VariableRefactoringAgent(MODEL)
+        function_refactoring_agent = FunctionRefactoringAgent(MODEL)
     else:
-        general_refactoring_agent = GeneralRefactoringAgent(model_name)
+        general_refactoring_agent = GeneralRefactoringAgent(MODEL)
 
     # --- Nodes ---
 
@@ -75,6 +76,8 @@ def build_graph(model_name: str, use_specialised_refactoring_agents: bool = Fals
         plan_json, validation_tests, test_coverage = planner.run(
             instruction=state.get("instruction"),
             repository_path=Path(state["repository_path"]),
+            relevant_files=state["relevant_files"],
+            task_name=state["task_name"]
         )
 
         planner_output = json.loads(plan_json)
@@ -110,7 +113,7 @@ def build_graph(model_name: str, use_specialised_refactoring_agents: bool = Fals
             original_code = Path(file).read_text()
 
             refactored = None
-            if use_specialised_refactoring_agents:
+            if USE_SPECIALISED:
                 refactoring_entity = file_plan['refactoring_entity']
                 if refactoring_entity == 'variable':
                     refactored = variable_refactoring_agent.run(

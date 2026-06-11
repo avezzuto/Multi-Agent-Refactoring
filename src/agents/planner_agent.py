@@ -14,6 +14,7 @@ from src.prompts import (
     FILE_LEVEL_PLAN_PROMPT,
 )
 from src.testing.test_creator import TestCreator, logger
+from src.config import PROJECT_ROOT, SKIP_FILE_PLANNING
 
 
 @dataclass
@@ -75,7 +76,8 @@ class PlannerAgent(BaseAgent):
             self,
             instruction: Optional[str],
             repository_path: Path,
-            context: str | None = None,
+            relevant_files: list[Path],
+            task_name: str
     ) -> tuple[str, list[str], float]:
         """
         Main planner entry point.
@@ -90,34 +92,54 @@ class PlannerAgent(BaseAgent):
 
         if not repository_path.exists():
             raise FileNotFoundError(f"Repository path does not exist: {repository_path}")
+        
+        if SKIP_FILE_PLANNING:
+            mapping_file = PROJECT_ROOT/"RefactorBenchFilteredProblems"/"mapping.txt"
+            files = {}
+            for file_path in relevant_files:
+                files[str(file_path)] = file_path.read_text(encoding="utf-8")
+            
+            refactorings = []
+            for line in mapping_file.read_text().splitlines():
+                line.strip()
+                line_contents = line.split(",")
+                if task_name in line_contents:
+                    refactoring_entity = line_contents[1].strip()
+                    for identifier in line_contents[2].split(";"):
+                        refactorings.append(
+                            RefactoringRequest(
+                                refactoring_entity=refactoring_entity,
+                                identifier=identifier.strip(),
+                            )
+                        )
+        else:
+            files = self._read_python_files(repository_path)
 
-        files = self._read_python_files(repository_path)
-
-        target = (
-            self._extract_target_identifiers(
-                instruction
-            )
-        )
-
-        logger.debug(f"Extracted target identifiers with instruction \"{instruction}\": {target}\n")
-
-        refactorings = []
-
-        for identifier in target.identifiers:
-
-            entity_type = (
-                self._resolve_identifier_type(
-                    identifier=identifier,
-                    files=files,
+            target = (
+                self._extract_target_identifiers(
+                    instruction
                 )
             )
 
-            refactorings.append(
-                RefactoringRequest(
-                    refactoring_entity=entity_type,
-                    identifier=identifier,
+            logger.debug(f"Extracted target identifiers with instruction \"{instruction}\": {target}\n")
+
+            refactorings = []
+
+            for identifier in target.identifiers:
+
+                entity_type = (
+                    self._resolve_identifier_type(
+                        identifier=identifier,
+                        files=files,
+                    )
                 )
-            )
+
+                refactorings.append(
+                    RefactoringRequest(
+                        refactoring_entity=entity_type,
+                        identifier=identifier,
+                    )
+                )
 
         all_evidence = []
 
