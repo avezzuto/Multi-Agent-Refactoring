@@ -44,6 +44,7 @@ jobs:
           USE_DUMMY: "false"
           USE_SPECIALISED: "false"
           USE_VANILLA: "false"
+          SKIP_FILE_PLANNING: "true"
         run: |
           python -m src.main
 
